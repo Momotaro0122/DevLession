@@ -1,4 +1,8 @@
 def hello():
     print(hello)
 
-hello()
+class MyClass(object):
+    def __init__(self):
+        pass
+
+#hello()
