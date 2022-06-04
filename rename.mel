@@ -1,0 +1,55 @@
+global proc string[] rename_function(string $title, string $suffix) {
+    string $selections[] = `ls -sl -long`;
+    //string $name = $title + $suffix;
+    print($title);
+    print($suffix);
+    for ($i = 0; $i < `size $selections` ; $i++) {
+        string $name = $title + string($i + 1)+ $suffix;
+        print($name);
+        //rename $selections[$i] $name;
+        
+    }
+    print($selections);
+    //print($name); 
+    return {};
+}
+//rename_function("test");
+
+global proc rename_ui(){
+    if( `window -exists renameStuffs` )
+        deleteUI renameStuffs;
+            
+        
+    window -t "renameStuffs" 
+                    -w 300 -h 50 -titleBar 1 -mnb 1 -mxb 1 
+                    -mb 1 -tlb 0 -sizeable 1 -iconName "Short Name"
+                    renameStuffs;
+    rowColumnLayout -numberOfColumns 2 -columnAttach 1 "right" 0
+        -columnWidth 1 100 -columnWidth 2 250;
+    text -label "Name";
+    string $title = `textField`;
+    text -label "Suffix";
+    string $suffix = `textField`;                     
+    /*columnLayout -adjustableColumn true;
+        button -label "Do Nothing";
+        button -label "Rename!" -command "rename_function($title, $suffix)";*/
+    
+    setParent ..;
+    textField -edit -enterCommand ("setFocus " + $suffix) $title;
+    textField -edit -enterCommand "rename_function($title, $suffix)" $suffix;
+
+
+    showWindow renameStuffs;
+}
+
+
+global proc RenameStuffs(){
+       rename_ui;
+}
+
+
+
+RenameStuffs();
+
+
+
