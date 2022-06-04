@@ -1,0 +1,81 @@
+proc string[] print_by_sel() {
+    
+    
+    string $sel[] = `ls -sl -long`;
+    
+    if (`size $sel` == 0){
+        string $sel[] = `ls -type mesh`;
+        //polyEvaluate -f;
+        int $polyCount[] = {};
+        string $object[] = {};
+        for ($i = 0; $i <`size $sel`; $i++){
+            select $sel[$i] ;
+            int $num[] = `polyEvaluate -f`;
+            
+            $polyCount[$i] = $num ;
+            $object[$i] = $sel[$i] ; 
+
+            select -cl ; 
+        }
+        
+        if (`size $polyCount` == `size $object`){
+            for ($obj = 0; $obj < `size $polyCount`; $obj++){
+                //Resulting object`s name.
+                print("Poly Mesh name: \n"+ $object[$obj]+"\n");
+                //Resulting it`s poly count.
+                print("Poly face count of this geo: " );
+                print($polyCount[$obj]);
+                print("\n===============separator bar================\n");
+            }
+        }
+        else{
+            print("Seems like there are some meshes that have no faces, or have some issues in the code.")
+        }
+    //print($num);
+     
+    }
+    else if (`size $sel` > 1){
+        int $polyCount[] = {};
+        string $object[] = {};
+        for ($i = 0; $i <`size $sel`; $i++){
+            select $sel[$i] ;
+            int $num[] = `polyEvaluate -f`;
+            
+            $polyCount[$i] = $num ;
+            $object[$i] = $sel[$i] ; 
+
+            select -cl ; 
+        }
+        
+        if (`size $polyCount` == `size $object`){
+            for ($obj = 0; $obj < `size $polyCount`; $obj++){
+                //Resulting object`s name.
+                print("Poly Mesh name: \n"+ $object[$obj]+"\n");
+                //Resulting it`s poly count.
+                print("Poly face count of this geo: " );
+                print($polyCount[$obj]);
+                print("\n===============separator bar================\n");
+            }
+        }
+        else{
+            print("Seems like there are some meshes that have no faces, or have some issues in the code.")
+        }
+    }
+    else{
+
+        int $num[] = `polyEvaluate -f`;
+        //Resulting object`s name.
+        print("Poly Mesh name: \n"+ $sel+"\n");
+        //Resulting it`s poly count.
+        print("Poly face count of this geo: " );
+        print($num);
+        print("\n===============separator bar================\n");
+
+    }
+    //print($num); 
+    
+    return {};
+}
+
+print_by_sel()
+
