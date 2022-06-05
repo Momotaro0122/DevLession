@@ -1,0 +1,61 @@
+global proc string[] rename_function(string $title, string $suffix) {
+    string $selections[] = `ls -sl -long`;
+    string $rename_results[];
+    //string $name = $title + $suffix;
+    //print($title);
+    //print($suffix);
+    for ($i = 0; $i < `size $selections` ; $i++) {
+        // We can duplicate $selections[$i] to a new variable
+        // Because we mention it in multi time below!
+        string $long_name = $selections[$i];
+        // Eazy way to get short name from long name.
+        string $short_name = `ls $long_name`;
+        // You could be named more accurately : $name -> $new_name
+        string $new_name = $title + string($i + 1) + $suffix;
+        // print($name);
+        // Rename command will return the new name.
+        // Added if statement to determine the new name is old name already?
+        // If it is, skip rename process.
+        if ($short_name != $new_name) {
+            // In this line, we re-use $new_name and update it
+            // to new name if got not expected name.
+            $new_name = `rename $selections[$i] $name`;
+            $rename_results[`size $rename_results`] = $new_name;
+        }
+    }
+    //print($selections);
+    //print($name);
+    // Finally, We return the all renamed string array,
+    // If you want to do something after this function out.
+    return $rename_results;
+}
+//rename_function("test");
+
+global proc rename_ui(){
+    if(`window -exists renameStuffs`) {
+        deleteUI renameStuffs;
+    }
+    window -t "renameStuffs" 
+        -w 300 -h 50 -titleBar 1 -mnb 1 -mxb 1 
+        -mb 1 -tlb 0 -sizeable 1 -iconName "Short Name"
+        renameStuffs;
+    rowColumnLayout -numberOfColumns 2 -columnAttach 1 "right" 0
+        -columnWidth 1 100 -columnWidth 2 250;
+    text -label "Name";
+    string $title = `textField`;
+    text -label "Suffix";
+    string $suffix = `textField`;                     
+    /*columnLayout -adjustableColumn true;
+        button -label "Do Nothing";
+        button -label "Rename!" -command "rename_function($title, $suffix)";*/
+    setParent ..;
+    textField -edit -enterCommand ("setFocus " + $suffix) $title;
+    textField -edit -enterCommand "rename_function($title, $suffix)" $suffix;
+    showWindow renameStuffs;
+}
+
+global proc RenameStuffs(){
+       rename_ui;
+}
+
+RenameStuffs();
