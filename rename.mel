@@ -1,3 +1,4 @@
+
 global proc string[] rename_function(string $title, string $suffix) {
     string $selections[] = `ls -sl -long`;
     string $rename_results[];
@@ -18,8 +19,8 @@ global proc string[] rename_function(string $title, string $suffix) {
         // Added if statement to determine the new name is old name already?
         // If it is, skip rename process.
         if ($short_name != $new_name) {
-            // In this line, we re-use $new_name and update it
-            // to new name if got not expected name.
+        // In this line, we re-use $new_name and update it
+        // to new name if got not expected name.
             $new_name = `rename $selections[$i] $new_name`;
             $rename_results[`size $rename_results`] = $new_name;
         }
@@ -30,11 +31,11 @@ global proc string[] rename_function(string $title, string $suffix) {
     // If you want to do something after this function out.
     return $rename_results;
 }
-//rename_function("test");
+rename_function("test", "Geometr_skdjs");
 
-global proc rename_ui(){
+global proc rename_ui() {
     if(`window -exists renameStuffs`) {
-        deleteUI renameStuffs;
+    deleteUI renameStuffs;
     }
     window -t "renameStuffs" 
         -w 300 -h 50 -titleBar 1 -mnb 1 -mxb 1 
@@ -45,10 +46,10 @@ global proc rename_ui(){
     text -label "Name";
     string $title = `textField`;
     text -label "Suffix";
-    string $suffix = `textField`;                     
+    string $suffix = `textField`;
     /*columnLayout -adjustableColumn true;
-        button -label "Do Nothing";
-        button -label "Rename!" -command "rename_function($title, $suffix)";*/
+          button -label "Do Nothing";
+                  button -label "Rename!" -command "rename_function($title, $suffix)";*/
     setParent ..;
     textField -edit -enterCommand ("setFocus " + $suffix) $title;
     textField -edit -enterCommand "rename_function($title, $suffix)" $suffix;
@@ -56,7 +57,7 @@ global proc rename_ui(){
 }
 
 global proc RenameStuffs(){
-       rename_ui;
+    rename_ui;
 }
 
-RenameStuffs();
+//RenameStuffs();
