@@ -111,5 +111,3 @@ def search_poly_count(return_long_name = False, return_tri = False):
 
     return poly_count_dict
 search_poly_count(return_long_name = True, return_tri = True)
-
-
