@@ -1,81 +1,42 @@
-proc string[] print_by_sel() {
-    
-    
-    string $sel[] = `ls -sl -long`;
-    
-    if (`size $sel` == 0){
-        string $sel[] = `ls -type mesh`;
-        //polyEvaluate -f;
-        int $polyCount[] = {};
-        string $object[] = {};
-        for ($i = 0; $i <`size $sel`; $i++){
-            select $sel[$i] ;
-            int $num[] = `polyEvaluate -f`;
-            
-            $polyCount[$i] = $num ;
-            $object[$i] = $sel[$i] ; 
-
-            select -cl ; 
-        }
-        
-        if (`size $polyCount` == `size $object`){
-            for ($obj = 0; $obj < `size $polyCount`; $obj++){
-                //Resulting object`s name.
-                print("Poly Mesh name: \n"+ $object[$obj]+"\n");
-                //Resulting it`s poly count.
-                print("Poly face count of this geo: " );
-                print($polyCount[$obj]);
-                print("\n===============separator bar================\n");
-            }
-        }
-        else{
-            print("Seems like there are some meshes that have no faces, or have some issues in the code.")
-        }
-    //print($num);
-     
+proc int poly_face_count(string $shapes[])
+{
+    // Sum polyface counts from shapes.
+    // ::args::
+    //    $shapes (string[]) Recevie input shapes (mesh).
+    // ::return::
+    //    int : Sum of polyface count.
+    //
+    int $poly_counts[] = {};
+    int $sum = 0;
+    for ($shape in $shapes) {
+        int $number_of_polyface[] = `polyEvaluate -f $shape`;
+        $poly_counts[`size $poly_counts`] = $number_of_polyface[0];
+        print("Name : " + $shape + "\n");
+        print("Polyface : " + string($number_of_polyface[0]) + "\n");
     }
-    else if (`size $sel` > 1){
-        int $polyCount[] = {};
-        string $object[] = {};
-        for ($i = 0; $i <`size $sel`; $i++){
-            select $sel[$i] ;
-            int $num[] = `polyEvaluate -f`;
-            
-            $polyCount[$i] = $num ;
-            $object[$i] = $sel[$i] ; 
-
-            select -cl ; 
-        }
-        
-        if (`size $polyCount` == `size $object`){
-            for ($obj = 0; $obj < `size $polyCount`; $obj++){
-                //Resulting object`s name.
-                print("Poly Mesh name: \n"+ $object[$obj]+"\n");
-                //Resulting it`s poly count.
-                print("Poly face count of this geo: " );
-                print($polyCount[$obj]);
-                print("\n===============separator bar================\n");
-            }
-        }
-        else{
-            print("Seems like there are some meshes that have no faces, or have some issues in the code.")
-        }
+    for ($poly_count in $poly_counts) {
+        $sum += $poly_count;
     }
-    else{
-
-        int $num[] = `polyEvaluate -f`;
-        //Resulting object`s name.
-        print("Poly Mesh name: \n"+ $sel+"\n");
-        //Resulting it`s poly count.
-        print("Poly face count of this geo: " );
-        print($num);
-        print("\n===============separator bar================\n");
-
-    }
-    //print($num); 
-    
-    return {};
+    return $sum;
 }
 
-print_by_sel()
+proc int print_poly_face_count()
+{
+    // Sum polyface counts.
+    // ::args:: None
+    // ::return::
+    //   int : Sum of polyface count.
+    string $selections[] = `ls -sl -l`;
+    int $sum_of_polyface = 0;
+    if (!`size $selections`) {
+        $selections = `ls -type "mesh"`;
+    }
+    $sum_of_polyface = poly_face_count($selections);
+    return $sum_of_polyface; 
+}
 
+{ // Main
+    int $sum_of_polyface = print_poly_face_count();
+    print("Total number of polyface is " + string($sum_of_polyface) + "\n");
+
+}
