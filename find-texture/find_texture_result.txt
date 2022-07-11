@@ -1,0 +1,9 @@
+Done ... 
+ 6 texture(s) have been found.
+Spend time : 0.0000 sec
+D:/Temp/texture_01.tif
+D:/Temp/test/texture_02.tif
+D:/Temp/test/texture_02.tif
+D:/Database/asset/asset_texture_03.tif
+D:/Database/asset/asset_texture_05.tif
+D:/Database/asset/aaaaaa_texture_03.tif
